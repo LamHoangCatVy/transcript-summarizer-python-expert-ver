@@ -43,6 +43,10 @@ def convert_df_to_excel(df):
     processed_data = output.getvalue()
     return processed_data
 
+# Function to convert the summary content to a README-like text file
+def convert_to_text_file(content):
+    return content.encode()
+
 # Streamlit app interface
 st.title("Tool summarizer script Python")
 
@@ -64,13 +68,20 @@ if transcript:
             df = create_question_dataframe(questions)
             st.dataframe(df)  # Display the DataFrame
         
-            # Convert DataFrame to Excel and provide download link
+            # Convert DataFrame to Excel and provide download link for questions
             excel_data = convert_df_to_excel(df)
             st.download_button(label="Download Review Questions as Excel", 
                                data=excel_data, 
                                file_name="review_questions.xlsx", 
                                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    
+        
+        # Download the entire summary as a README-like text file
+        text_file_data = convert_to_text_file(summary_response)
+        st.download_button(label="📥 Download full response as README", 
+                           data=text_file_data, 
+                           file_name="README.txt", 
+                           mime="text/plain")
+
     except Exception as e:
         st.error(f"Error: {e}")
 else:
